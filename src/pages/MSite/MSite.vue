@@ -93,9 +93,6 @@
               el: '.swiper-pagination',
             },
           })
-          new BScroll('.miste-content-wrapper', {
-            click: true
-          })
         })
       }
     },
