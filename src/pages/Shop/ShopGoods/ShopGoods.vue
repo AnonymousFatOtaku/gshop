@@ -55,17 +55,62 @@
     mounted() {
       this.$store.dispatch('getShopGoods', () => {// 数据更新后执行
         this.$nextTick(() => { // 列表数据更新显示后执行
-          new BScroll('.menu-wrapper')
-          new BScroll('.foods-wrapper')
+          this._initScroll()
+          this._initTops()
         })
       })
     },
     computed: {
       ...mapState(['goods']),
       // 计算得到当前分类的下标
-      currentIndex() {
-
+      currentIndex() {// 初始和相关数据发生了变化时执行
+        // 得到条件数据
+        const {scrollY, tops} = this
+        // 根据条件计算产生一个结果
+        const index = tops.findIndex((top, index) => {
+          // scrollY>=当前top && scrollY<下一个top
+          return scrollY >= top && scrollY < tops[index + 1]
+        })
+        // 返回结果
+        return index
       }
+    },
+    // 非事件回调函数相关方法前添加_用以区分
+    methods: {
+      // 初始化滚动
+      _initScroll() {
+        // 列表显示之后创建
+        new BScroll('.menu-wrapper', {})
+        this.foodsScroll = new BScroll('.foods-wrapper', {
+          probeType: 2,  // 在屏幕滑动中实时派发scroll事件，因为惯性滑动不会触发
+        })
+        // 给右侧列表绑定scroll监听
+        this.foodsScroll.on('scroll', ({x, y}) => {
+          console.log(x, y)
+          this.scrollY = Math.abs(y)
+        })
+        // 给右侧列表绑定scroll结束的监听，也可以直接设置probeType为3
+        this.foodsScroll.on('scrollEnd', ({x, y}) => {
+          console.log('scrollEnd', x, y)
+          this.scrollY = Math.abs(y)
+        })
+      },
+      // 初始化tops
+      _initTops() {
+        // 初始化tops
+        const tops = []
+        let top = 0
+        tops.push(top)
+        // 收集，找到所有分类的li
+        const lis = this.$refs.foodsUl.getElementsByClassName('food-list-hook')
+        Array.prototype.slice.call(lis).forEach(li => {
+          top += li.clientHeight
+          tops.push(top)
+        })
+        // 更新数据
+        this.tops = tops
+        console.log(tops)
+      },
     },
   }
 </script>
