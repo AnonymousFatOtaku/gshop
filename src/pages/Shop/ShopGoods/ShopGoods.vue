@@ -3,7 +3,8 @@
     <div class="goods">
       <div class="menu-wrapper">
         <ul>
-          <li class="menu-item" v-for="(good, index) in goods" :key="index" :class="{current: index===currentIndex}">
+          <li class="menu-item" v-for="(good, index) in goods" :key="index" :class="{current: index===currentIndex}"
+              @click="clickMenuItem(index)">
             <span class="text bottom-border-1px">
               <img class="icon" :src="good.icon" v-if="good.icon">
               {{good.name}}
@@ -80,9 +81,13 @@
       // 初始化滚动
       _initScroll() {
         // 列表显示之后创建
-        new BScroll('.menu-wrapper', {})
+        new BScroll('.menu-wrapper', {
+          // better-scroll默认会阻止浏览器原生click事件，设置为true才会派发click事件
+          click: true
+        })
         this.foodsScroll = new BScroll('.foods-wrapper', {
           probeType: 2,  // 在屏幕滑动中实时派发scroll事件，因为惯性滑动不会触发
+          click: true
         })
         // 给右侧列表绑定scroll监听
         this.foodsScroll.on('scroll', ({x, y}) => {
@@ -110,6 +115,15 @@
         // 更新数据
         this.tops = tops
         console.log(tops)
+      },
+      // 使右侧列表滑动到对应的位置
+      clickMenuItem(index) {
+        // 得到目标位置的scrollY
+        const scrollY = this.tops[index]
+        // 立即更新scrollY(让点击的分类项成为当前分类)
+        this.scrollY = scrollY
+        // 平滑滑动右侧列表，第三个参数为时长
+        this.foodsScroll.scrollTo(0, -scrollY, 300)
       },
     },
   }
