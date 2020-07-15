@@ -10,9 +10,9 @@ import {
   RECEIVE_GOODS,
   INCREMENT_FOOD_COUNT,
   DECREMENT_FOOD_COUNT,
+  CLEAR_CART,
 } from './mutation-types'
 import Vue from 'vue'
-import {CLEAR_CART} from "../../../../Project01/gshop-client_final/src/store/mutation-types";
 
 export default {
   [RECEIVE_ADDRESS](state, {address}) {
