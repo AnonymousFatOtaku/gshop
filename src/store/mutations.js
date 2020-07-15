@@ -12,6 +12,7 @@ import {
   DECREMENT_FOOD_COUNT,
 } from './mutation-types'
 import Vue from 'vue'
+import {CLEAR_CART} from "../../../../Project01/gshop-client_final/src/store/mutation-types";
 
 export default {
   [RECEIVE_ADDRESS](state, {address}) {
@@ -65,5 +66,12 @@ export default {
         state.cartFoods.splice(state.cartFoods.indexOf(food), 1)
       }
     }
+  },
+
+  [CLEAR_CART](state) {
+    // 清除food中的count
+    state.cartFoods.forEach(food => food.count = 0)
+    // 移除购物车中所有购物项
+    state.cartFoods = []
   },
 }
