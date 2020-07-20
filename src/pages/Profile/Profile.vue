@@ -43,7 +43,7 @@
             <span>
               <i class="iconfont icon-order-s"></i>
             </span>
-        <div class="my_order_div">
+        <div class="my_order_div" @click="$router.push('/order')">
           <span>我的订单</span>
           <span class="my_order_icon">
                 <i class="iconfont icon-jiantou1"></i>

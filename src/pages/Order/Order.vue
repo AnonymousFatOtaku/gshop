@@ -1,20 +1,33 @@
 <template>
   <section class="order">
     <HeaderTop title="订单列表"/>
-    <section class="order_no_login">
+    <section class="order_no_login" v-if="!userInfo._id">
       <img src="./images/person.png">
       <h3>登录后查看外卖订单</h3>
-      <button>立即登陆</button>
+      <button @click="$router.push('/login')">立即登陆</button>
+    </section>
+    <div class="msite_shop_list hh" v-else-if="userInfo.name==='aaa'">
+      <ShopList/>
+    </div>
+    <section class="order_no_login" v-else>
+      <img src="./images/person.png">
+      <h3>无历史订单</h3>
     </section>
   </section>
 </template>
 
 <script>
   import HeaderTop from "../../components/HeaderTop/HeaderTop";
+  import {mapState} from 'vuex'
+  import ShopList from "../../components/ShopList/ShopList.vue";
 
   export default {
+    computed: {
+      ...mapState(['userInfo'])
+    },
     components: {
-      HeaderTop
+      HeaderTop,
+      ShopList
     }
   }
 </script>
@@ -95,4 +108,7 @@
         outline none
         border-radius 5px
         padding 10px 20px
+
+    .hh
+      margin-top 45px
 </style>
